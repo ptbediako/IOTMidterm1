@@ -10,7 +10,14 @@
 #include "Particle.h"
 #include "neopixel.h"
 #include "Colors.h"
+#include "Button.h"
+#include "Adafruit_GFX.h"
+#include "Adafruit_SSD1306.h"
+#include "Adafruit_BME280.h"
+#include "IoTTimer.h"
 
+//Scanning for BME, OLED, maybe Load Cell Amp
+byte status, address, nDevices;
 
 SYSTEM_MODE(SEMI_AUTOMATIC);
 
@@ -24,32 +31,43 @@ Adafruit_NeoPixel pixel (PIXELCOUNT, SPI1, WS2812B);
 
 
 void setup() {
+  Wire.begin();
   Serial.begin(9600);
   waitFor(Serial.isConnected, 10000);
-  pixel.begin();
-  pixel.setBrightness(35);
-  pixel.show();
+  Serial.printf("I2C Scanner\n") //part of scanning for I2C devices
+
+  //pixel.begin();
+  //pixel.setBrightness(35);
+  //pixel.show();
   
 }
 
 void loop() {
-//Temperature Neopixels
-    startPixelTmp=0;
-    endPixelTmp= 2;
-    pixelFill(startPixelTmp, endPixelTmp, violet);
+  Serial.printf("Starting scan: \n-------------\n");
+  nDevices=0;
+  fir(address=0; address <=127; address++){
+    Wire.beginTransmission(address);
+    status=Wire.endTransmission();
+    if(status == 0);
+  }
+
+  ////Temperature Neopixels
+  startPixelTmp=0;
+  endPixelTmp= 2;
+  pixelFill(startPixelTmp, endPixelTmp, violet);
 
   
-//Humidity Neopixels
-    startPixelHu=3;
-    endPixelHu=5;
-    pixelFill(startPixelHu, endPixelHu, green);
- 
+////Humidity Neopixels
+  startPixelHu=3;
+  endPixelHu=5;
+  pixelFill(startPixelHu, endPixelHu, green);
 
-//Weight Neopixels
-    startPixelWt=6;
-    endPixelWt=8;
-    pixelFill(startPixelWt, endPixelWt, red);
- 
+
+////Weight Neopixels
+  startPixelWt=6;
+  endPixelWt=8;
+  pixelFill(startPixelWt, endPixelWt, red);
+
 }
 
 void pixelFill(int startPixel, int endPixel, int color){
