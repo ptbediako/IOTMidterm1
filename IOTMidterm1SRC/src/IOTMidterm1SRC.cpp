@@ -43,9 +43,10 @@ const int OLED_RESET = -1;
 Adafruit_SSD1306 display(OLED_RESET);
 IoTTimer measTimer;
 Button encSwitch(ENCSWITCH);
+Encoder encDial (PINA, PINB);
 
-float tempC, humidRH;
-float tempF, weight;
+float tempC, tempF, humidRH, weight;
+float tempSet, humidSet, weightSet;
 bool status;
 const char degree = 0xF8;
 const int TIMER = 500;
@@ -58,6 +59,14 @@ const int WEMO3=3;
 const int WEMO4=4;
 const int WEMO5=5;
 const int WEMO0=0;
+const int BULB1=1;
+const int BULB2=2;
+const int BULB3=3;
+const int BULB4=4;
+const int BULB5=5;
+const int BULB6=6;
+const int SATURATION=255;
+float brightness;
 
 bool onOff;
 
