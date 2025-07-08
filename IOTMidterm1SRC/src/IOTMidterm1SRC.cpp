@@ -20,12 +20,13 @@
 #include "IoTClassroom_CNM.h"
 
 
-SYSTEM_MODE(MANUAL);
+//SYSTEM_MODE(MANUAL);
+SYSTEM_MODE(SEMI_AUTOMATIC);
 //SYSTEM_THREAD(ENABLED);
 
 
 //Neopixel variables
-const int PIXELCOUNT = 9;
+const int PIXELCOUNT = 3;
 int color;
 int startPixelTmp, endPixelTmp, startPixelHu, endPixelHu, startPixelWt, endPixelWt;
 const int TMPPIXEL = 0;
@@ -111,16 +112,16 @@ void setup() {
   snackScale.tare();
   snackScale.set_scale(CALFACTOR);
   
-  WiFi.on();
-  WiFi.clearCredentials();
-  WiFi.setCredentials("IoTNetwork");
+  // WiFi.on();
+  // WiFi.clearCredentials();
+  // WiFi.setCredentials("IoTNetwork");
   
-  WiFi.connect();
-  while(WiFi.connecting()) {
-    Serial.printf(".");
-  }
+  // WiFi.connect();
+  // while(WiFi.connecting()) {
+  //   Serial.printf(".");
+  // }
   
-  Serial.printf("\n\n");
+  // Serial.printf("\n\n");
 
 
   pixel.begin();
@@ -157,7 +158,6 @@ void loop() {
         encDial.write(encPos=0);
       }
       
-
       display.setTextSize(1);
       display.setTextColor(WHITE);
       display.setCursor(0,0);
@@ -173,8 +173,9 @@ void loop() {
     ////Temperature Neopixels
       //startPixelTmp=0;
       //endPixelTmp= 2;
-      if ((tempF < 71.5) || (tempF > 73.6)){
+      if ((tempF < 74.8) || (tempF > 75.1)){
         pixel.setPixelColor(TMPPIXEL,red);
+        pixel.show();
         //pixelFill(startPixelTmp, endPixelTmp, red);
         //  wemoWrite(WEMO0,HIGH);
         //  wemoWrite(WEMO1,HIGH);
@@ -185,6 +186,7 @@ void loop() {
       }
       else{
         pixel.setPixelColor(TMPPIXEL,green);
+        pixel.show();
         //pixelFill(startPixelTmp, endPixelTmp, green);
         //  wemoWrite(WEMO0,LOW);
         //  wemoWrite(WEMO1,LOW);
@@ -198,12 +200,14 @@ void loop() {
     ////Humidity Neopixels
       //startPixelHu=3;
       //endPixelHu=5;
-      if ((humidRH < 54.4) || (humidRH > 54.6)){
+      if ((humidRH < 42.8) || (humidRH > 50.1)){
         pixel.setPixelColor(HUPIXEL,red);
+        pixel.show();
         //pixelFill(startPixelHu, endPixelHu, red);
       }
       else{
-        pixel.setPixelColor(HUPIXEL,green);        
+        pixel.setPixelColor(HUPIXEL,green);
+        pixel.show();        
         //pixelFill(startPixelHu, endPixelHu, green);
       }
 
@@ -214,9 +218,10 @@ void loop() {
 
       if(weight2 < 180){
         pixel.setPixelColor(WTPIXEL,red);
-        Serial.printf("Turning on Hue# %i\n",BULB6);
-        setHue(BULB6,TRUE,HueRainbow[red],brightness,SATURATION);
-        setHue(BULB4,TRUE,HueRainbow[red],brightness,SATURATION);
+        pixel.show();
+      //  Serial.printf("Turning on Hue# %i\n",BULB6);
+      //  setHue(BULB6,TRUE,HueRainbow[red],brightness,SATURATION);
+      //  setHue(BULB4,TRUE,HueRainbow[red],brightness,SATURATION);
 
        if(encPos != lastEncPos){
         Serial.printf("Encoder position %i\n",encPos);
@@ -226,9 +231,10 @@ void loop() {
       }
         else {
         pixel.setPixelColor(WTPIXEL,green);
-        Serial.printf("Turning on Hue# %i\n",BULB6);
-        setHue(BULB6,FALSE);//,green,brightness,SATURATION);
-        setHue(BULB4,FALSE);//,green,brightness,SATURATION);
+        pixel.show();
+      //  Serial.printf("Turning on Hue# %i\n",BULB6);
+      //  setHue(BULB6,FALSE);//,green,brightness,SATURATION);
+      //  setHue(BULB4,FALSE);//,green,brightness,SATURATION);
       }
       
 
