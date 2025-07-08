@@ -5,7 +5,7 @@
 https://www.hackster.io/ptbediako/midterm-1-smart-room-controller-73c56e
 
 ## Snack Trax
-Snack Trax is an in-cabinet combination environmental sensor and food scale designed to help you keep your snacks fresh and fully stocked. Using a temperature, humidity, and weight tracking system, Snack Trax displays live readings of storage conditions and communicates with wireless devices around the room to let you know if you're running low on snacks or if your snack shelf is too warm, cold, dry, or humid.
+Snack Trax is a combination environmental sensor and food scale designed to help you keep the foods in your pantry fresh and fully stocked. Using a temperature, humidity, and weight tracking system, Snack Trax displays live readings of storage conditions and communicates with wireless devices around the room to let you know if you're running low on snacks or if your snack shelf is too warm, cold, dry, or humid.
 
 ## Motivation
 The IOT classroom has a great supply of snacks that we can request to have restocked, but sometimes things run out before anyone notices. Plus, storing certain types of snacks in the wrong environmental conditions can shorten their shelf life or make them taste less fresh. This device helps maximize the classroom snack stash by giving the whole room a heads up if we need to restock or check on the temperature or humidity conditions in the snack pantry.
