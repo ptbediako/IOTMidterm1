@@ -26,11 +26,16 @@ The IOT classroom has a great supply of snacks that we can request to have resto
 * 3D printed tray
 
 ## Equipment
-* Wire cutters
 * Epilog Helix Lazer
 * Miter saw
 * 1000g calibration weights
 * Bambu Lab X1 Carbon 3D Printer
+
+## Software
+* C/C++ in Visual Studio Code
+* Adobe Illustrator
+* SolidWorks
+* Bambu Studio
 
 ## Features
 * Dynamic OLED display message for detailed readings of snack and pantry status
@@ -38,4 +43,4 @@ The IOT classroom has a great supply of snacks that we can request to have resto
 * Smart lights and outlets for whole room warnings of pantry and stock status
 
 ## How it works and what it does
-Snack Trax has two pieces: 1) a sensor and control panel and 2) a food scale. The sensor and control panel features an OLED that displays humidty, temperature, and weight readings as well as neopixels that show users whether readings are within an ideal range and a dial that can modify the brightness of the status hue lights to meet the user's preference. Hue and neopixel lights flash green for readings within ideal bounds or red for readings that are out of bounds. Different wemo outlets turn on when temperature and humidity readings are out of bounds to warn users to check on the pantry.
+Snack Trax has two pieces: 1) a sensor and control panel and 2) a food scale. When plugged in, the sensor and control panel features an OLED that displays humidty, temperature, and weight readings as well as neopixels that show users whether readings are within an ideal range and a twist dial that can modify the brightness of the status hue lights to meet the user's preference. Hue and neopixel lights flash green for readings within ideal bounds or red for readings that are out of bounds. Different wemo outlets turn on when temperature and humidity readings are out of bounds to warn users to check on the pantry.
