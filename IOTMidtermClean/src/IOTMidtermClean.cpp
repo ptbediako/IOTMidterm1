@@ -22,8 +22,6 @@
 
 SYSTEM_MODE(MANUAL);
 //SYSTEM_MODE(SEMI_AUTOMATIC);
-//SYSTEM_THREAD(ENABLED);
-
 
 //Neopixel variables
 const int PIXELCOUNT = 3;
@@ -50,7 +48,6 @@ float weight, lastWgtTime;
 float tempC, tempF, humidRH;
 bool status;
 const char degree = 0xF8;
-const int TIMER = 500;
 const int BME280=0x76;
 const int OLEDSCRN=0x3c;
 
@@ -74,15 +71,12 @@ int BULBNUM;
 const int MAXBRITE=255;
 const int SATURATION=255;
 float brightness;
-//int HueRainbow[] = {HueRed, HueOrange, HueYellow, HueGreen, HueBlue, HueIndigo, HueViolet};
 
 
 Adafruit_NeoPixel pixel (PIXELCOUNT, SPI1, WS2812B);
 Adafruit_BME280 bme;
 const int OLED_RESET = -1;
 Adafruit_SSD1306 display(OLED_RESET);
-IoTTimer measTimer;
-Button eSwitch(ENCSWITCH);
 Encoder encDial (PINA, PINB);
 HX711 snackScale(DT,CLK);
 
@@ -101,8 +95,7 @@ void setup() {
   display.begin(SSD1306_SWITCHCAPVCC,OLEDSCRN);
   display.display();
   display.clearDisplay();
-  //measTimer.startTimer();
-
+  
   snackScale.set_scale();
   delay(5000);
   snackScale.tare();
@@ -123,7 +116,8 @@ void setup() {
   pixel.setBrightness(35);
   pixel.show();
 
-  brightness=50*(MAXBRITE/MAXENCPOS);
+  //start the hue lights at a medium brightness level for when they first turn on (this can be adjusted below)
+  brightness=50*(MAXBRITE/MAXENCPOS); 
   encDial.write(50);
 }
 
@@ -131,12 +125,11 @@ void setup() {
 *********************************************************
 *********************************************************/
 void loop() {
-
-  // if(measTimer.isTimerReady()){
   tempC=bme.readTemperature();
-  tempF=(tempC*1.8) +32;
+  tempF=(tempC*1.8) +32; //convert temperature reading to Celsius
   humidRH=bme.readHumidity();
 
+  //Create a time buffer between weight readings without using a "delay"
   if((millis()-lastWgtTime) > 3000){
     weight = snackScale.get_units(SAMPLES);
     if (weight < 0){
@@ -145,8 +138,8 @@ void loop() {
     lastWgtTime=millis();
   }
 
+  //Establish encoder dial related variables so turning the dial changes the brightness of the hue lights
   brightness=encPos*(MAXBRITE/MAXENCPOS);
-
   encPos= encDial.read();
   if(encDial.read()>95){
     encDial.write(encPos=95);
@@ -161,7 +154,7 @@ void loop() {
     lastEncPos = encPos; 
   }
 
-      
+  //Programming the OLED screen to show the environment and weight readings
   display.setTextSize(1);
   display.setTextColor(WHITE);
   display.setCursor(0,0);
@@ -170,10 +163,10 @@ void loop() {
   Serial.printf("Temperature: %0.1f %cF\nHumidity: %0.1f RH\nWeight: %0.1f g\n",tempF, degree, humidRH, weight);
   display.display();
   
-  ////Temperature Neopixels
+  //Program the neopixels, hue lights, and wemo outlets so they depict temperature, humidity, and weight status
 
-  if ((tempF > 73.0) && (tempF < 75.0)){
-  //else{
+  ////Temperature: Establish a range of acceptable temperatures, turn neopixel green if within range and turn off ODD numbered wemos
+  if ((tempF > 73.0) && (tempF < 75.0)){ 
     pixel.setPixelColor(TMPPIXEL,green);
     pixel.show();
     for(WEMONUM=0; WEMONUM < 6; WEMONUM++){
@@ -182,9 +175,8 @@ void loop() {
       }
     }
   }
-
+  //Turn neopixel red if out of range and turn on odd numbered wemos
   else{
-  //if ((tempF < 74.0) || (tempF > 75.1)){
     pixel.setPixelColor(TMPPIXEL,red);
     pixel.show();
     for(WEMONUM=0; WEMONUM < 6; WEMONUM++){
@@ -194,8 +186,7 @@ void loop() {
     }
   }
 
-////Humidity Neopixels
-  //else{
+////Humidity: Establish a range of acceptable humidity values, turn neopixel green if within range and turn off EVEN numbered wemos
   if ((humidRH > 64.8) && (humidRH < 66.0)){
     pixel.setPixelColor(HUPIXEL,green);
     pixel.show();
@@ -206,7 +197,7 @@ void loop() {
       }
     }
   }
-//if ((humidRH < 42.8) || (humidRH > 60.1)){
+
 else{
     pixel.setPixelColor(HUPIXEL,red);
     pixel.show();
@@ -217,12 +208,8 @@ else{
     }
   }
 
-
-
-
-////Weight Neopixels
-  if(weight < 200){ //at CALFACTOR XX, two nutrigrain bars in the box registered at min ~88g
-    //and two sandwich crackers in the box registered at min ~83g, neither went over 100g
+////Weight: Set a minimum weight for the scale, change the neopixel and hue lights green or red based on the weight of remaining snacks
+  if(weight < 200){
     pixel.setPixelColor(WTPIXEL,red);
     pixel.show();
     for (BULBNUM=1; BULBNUM<7; BULBNUM++){
